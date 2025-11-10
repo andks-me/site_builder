@@ -2,9 +2,41 @@ import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import logo from "@/assets/quant-logo.jpg";
 
 const Index = () => {
+  const portfolioGrowthData = [
+    { quarter: "Q1 2024", value: 2.5, deals: 8 },
+    { quarter: "Q2 2024", value: 4.2, deals: 15 },
+    { quarter: "Q3 2024", value: 7.8, deals: 23 },
+    { quarter: "Q4 2024", value: 12.5, deals: 35 },
+    { quarter: "Q1 2025", value: 18.3, deals: 48 },
+  ];
+
+  const successRateData = [
+    { month: "Jun", pilotToPaid: 78, avgTime: 85 },
+    { month: "Jul", pilotToPaid: 82, avgTime: 88 },
+    { month: "Aug", pilotToPaid: 85, avgTime: 82 },
+    { month: "Sep", pilotToPaid: 88, avgTime: 78 },
+    { month: "Oct", pilotToPaid: 91, avgTime: 75 },
+  ];
+
+  const sectorDistribution = [
+    { name: "AI/ML", value: 35, color: "#0ea5e9" },
+    { name: "FinTech", value: 25, color: "#22c55e" },
+    { name: "HealthTech", value: 20, color: "#f59e0b" },
+    { name: "Manufacturing", value: 12, color: "#ef4444" },
+    { name: "Other", value: 8, color: "#8b5cf6" },
+  ];
+
+  const roiData = [
+    { cohort: "2023 H1", roi: 3.2 },
+    { cohort: "2023 H2", roi: 4.1 },
+    { cohort: "2024 H1", roi: 5.8 },
+    { cohort: "2024 H2", roi: 7.2 },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <header className="fixed top-0 left-0 right-0 bg-background border-b border-border z-50">
@@ -22,20 +54,26 @@ const Index = () => {
             </div>
 
             <nav className="flex items-center gap-6">
-              <a 
-                href="#projects" 
+              <a
+                href="#projects"
                 className="text-sm font-medium text-foreground hover:text-primary transition-colors scroll-smooth"
               >
                 Projects
               </a>
-              <a 
-                href="#partners" 
+              <a
+                href="#metrics"
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors scroll-smooth"
+              >
+                Metrics
+              </a>
+              <a
+                href="#partners"
                 className="text-sm font-medium text-foreground hover:text-primary transition-colors scroll-smooth"
               >
                 Partners
               </a>
-              <a 
-                href="#faq" 
+              <a
+                href="#faq"
                 className="text-sm font-medium text-foreground hover:text-primary transition-colors scroll-smooth"
               >
                 FAQ
@@ -143,6 +181,190 @@ const Index = () => {
                   <p className="text-muted-foreground">
                     HIPAA-compliant platform now serving 15+ healthcare providers nationwide.
                   </p>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+
+          <section id="metrics" className="mb-24 scroll-mt-32">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Investor Metrics</h2>
+            <p className="text-muted-foreground mb-8 max-w-3xl">
+              Track our portfolio growth, success rates, and sector distribution with real-time data.
+            </p>
+
+            <div className="grid gap-8 lg:grid-cols-2 mb-8">
+              <Card className="animate-bubble-in">
+                <CardHeader>
+                  <CardTitle>Portfolio Growth</CardTitle>
+                  <CardDescription>Deal value and volume over time ($M)</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart data={portfolioGrowthData}>
+                      <defs>
+                        <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis dataKey="quarter" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "6px"
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#0ea5e9"
+                        fillOpacity={1}
+                        fill="url(#colorValue)"
+                        strokeWidth={2}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="animate-bubble-in [animation-delay:100ms]">
+                <CardHeader>
+                  <CardTitle>Success Rate Trends</CardTitle>
+                  <CardDescription>Pilot-to-paid conversion (%)</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={successRateData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis dataKey="month" className="text-xs" />
+                      <YAxis domain={[70, 95]} className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "6px"
+                        }}
+                      />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="pilotToPaid"
+                        stroke="#22c55e"
+                        strokeWidth={3}
+                        name="Conversion Rate"
+                        dot={{ r: 5 }}
+                        activeDot={{ r: 7 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="animate-bubble-in [animation-delay:200ms]">
+                <CardHeader>
+                  <CardTitle>Sector Distribution</CardTitle>
+                  <CardDescription>Portfolio allocation by industry</CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={sectorDistribution}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={100}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {sectorDistribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "6px"
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="animate-bubble-in [animation-delay:300ms]">
+                <CardHeader>
+                  <CardTitle>Average ROI by Cohort</CardTitle>
+                  <CardDescription>Return on investment multiple</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={roiData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis dataKey="cohort" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "6px"
+                        }}
+                      />
+                      <Bar
+                        dataKey="roi"
+                        fill="#f59e0b"
+                        radius={[8, 8, 0, 0]}
+                        name="ROI Multiple"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-4">
+              <Card className="text-center animate-bubble-in [animation-delay:400ms] hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="text-sm">Avg. Time to Revenue</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-primary">75</p>
+                  <p className="text-sm text-muted-foreground">days</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center animate-bubble-in [animation-delay:450ms] hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="text-sm">Active Deals</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-primary">48</p>
+                  <p className="text-sm text-muted-foreground">in pipeline</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center animate-bubble-in [animation-delay:500ms] hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="text-sm">Success Rate</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-primary">91%</p>
+                  <p className="text-sm text-muted-foreground">pilot to paid</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center animate-bubble-in [animation-delay:550ms] hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="text-sm">Total Portfolio Value</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold text-primary">$18.3M</p>
+                  <p className="text-sm text-muted-foreground">current quarter</p>
                 </CardContent>
               </Card>
             </div>
